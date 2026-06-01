@@ -1,0 +1,24 @@
+name: Bug report
+description: Report incorrect digest output or CLI behavior.
+title: "bug: "
+labels: ["bug", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the incorrect behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Minimal input
+      description: Paste a small redacted GitHub API item or command that reproduces the issue.
+      render: json
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected output
+    validations:
+      required: true

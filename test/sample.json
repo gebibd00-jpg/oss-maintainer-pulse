@@ -1,0 +1,26 @@
+[
+  {
+    "number": 12,
+    "title": "Add small regression test",
+    "html_url": "https://github.com/example/tool/pull/12",
+    "pull_request": {},
+    "updated_at": "2026-05-25T00:00:00Z",
+    "created_at": "2026-05-24T00:00:00Z",
+    "body": "/claim #71",
+    "comments": 2,
+    "labels": [{ "name": "tests" }],
+    "user": { "login": "contributor" },
+    "author_association": "CONTRIBUTOR"
+  },
+  {
+    "number": 13,
+    "title": "Document setup",
+    "html_url": "https://github.com/example/tool/issues/13",
+    "updated_at": "2026-05-31T00:00:00Z",
+    "body": "",
+    "comments": 0,
+    "labels": [{ "name": "docs" }],
+    "user": { "login": "maintainer" },
+    "author_association": "OWNER"
+  }
+]

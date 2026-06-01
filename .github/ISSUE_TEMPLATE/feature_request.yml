@@ -1,0 +1,24 @@
+name: Feature request
+description: Suggest a maintainer workflow improvement.
+title: "feature: "
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Maintainer workflow
+      description: What maintenance task would this help with?
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Desired output
+      description: Show the digest, JSON, or CLI behavior you would like.
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This can be implemented as a small, reviewable change.
+        - label: This does not require adding a heavy dependency.

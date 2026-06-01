@@ -1,0 +1,27 @@
+{
+  "name": "oss-maintainer-pulse",
+  "version": "0.1.0",
+  "description": "Generate maintainer-friendly GitHub issue and pull request triage digests.",
+  "type": "module",
+  "bin": {
+    "oss-maintainer-pulse": "./bin/oss-maintainer-pulse.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "lint": "node --check bin/oss-maintainer-pulse.js && node --check src/pulse.js && node --check test/pulse.test.js",
+    "start": "node bin/oss-maintainer-pulse.js"
+  },
+  "keywords": [
+    "github",
+    "open-source",
+    "maintenance",
+    "triage",
+    "issues",
+    "pull-requests"
+  ],
+  "author": "Kaizhang N.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}
