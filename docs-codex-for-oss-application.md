@@ -22,9 +22,10 @@ I would use API credits to add Codex-assisted maintainer automation: summarize P
 
 This project is intentionally small-project friendly. It focuses on practical maintainer work rather than stars: clear tests, CI, issue templates, a roadmap, and weekly triage workflows that help small active OSS projects keep review queues healthy.
 
-## Fields still needed from you
+## Applicant fields
 
-- First name
-- Last name
-- Email associated with your ChatGPT account
-- OpenAI Organization ID
+- First name: Kai
+- Last name: Zhang / Nong Kaizhang
+- Full Chinese name: Nong Kaizhang
+- Email associated with ChatGPT account: gebibd00@163.com
+- OpenAI Organization ID: org-1YgqF9QLqs980dxVhpym0ofH
