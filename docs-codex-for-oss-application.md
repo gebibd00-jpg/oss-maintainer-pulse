@@ -24,8 +24,8 @@ This project is intentionally small-project friendly. It focuses on practical ma
 
 ## Applicant fields
 
-- First name: Kai
-- Last name: Zhang / Nong Kaizhang
+- First name: Kaizhang
+- Last name: Nong
 - Full Chinese name: Nong Kaizhang
 - Email associated with ChatGPT account: gebibd00@163.com
 - OpenAI Organization ID: org-1YgqF9QLqs980dxVhpym0ofH
