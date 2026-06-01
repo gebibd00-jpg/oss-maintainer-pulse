@@ -12,12 +12,19 @@ Primary maintainer.
 
 ## Why this repository qualifies
 
-`oss-maintainer-pulse` helps small open-source maintainers turn GitHub issues and pull requests into a practical triage digest. It focuses on stale PRs, maintainer response queues, bounty/claim workflows, and release review prep. The project is intentionally small, dependency-light, tested, and designed for real ongoing OSS maintenance.
+`oss-maintainer-pulse` helps small OSS maintainers turn GitHub issues and PRs into a practical triage digest. It tracks stale work, maintainer response queues, bounty/claim workflows, and release review prep. It is public, tested, dependency-light, tagged, and maintained with issues, CI, roadmap, and contribution templates.
 
 ## API credits use
 
-I would use API credits to build maintainer automation: summarizing PR and issue timelines, detecting stale review queues, drafting release checklists, identifying security-sensitive changes, and generating weekly triage digests for small open-source repositories.
+I would use API credits to add Codex-assisted maintainer automation: summarize PR/issue timelines, detect contributor-last review queues, draft release checklists, flag security-sensitive changes, and generate weekly triage digests for small OSS repositories through GitHub Actions.
 
 ## Anything else
 
-This project is built around small-project maintainer needs rather than large enterprise dashboards. The goal is to make Codex-assisted triage and review workflows accessible to small active OSS projects with limited maintainer time.
+This project is intentionally small-project friendly. It focuses on practical maintainer work rather than stars: clear tests, CI, issue templates, a roadmap, and weekly triage workflows that help small active OSS projects keep review queues healthy.
+
+## Fields still needed from you
+
+- First name
+- Last name
+- Email associated with your ChatGPT account
+- OpenAI Organization ID
