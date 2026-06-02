@@ -49,6 +49,12 @@ Use a token to avoid public GitHub API rate limits:
 GITHUB_TOKEN=ghp_xxx oss-maintainer-pulse --repo owner/name
 ```
 
+Filter by label:
+
+```bash
+oss-maintainer-pulse --repo owner/name --label docs,triage
+```
+
 Use saved GitHub API JSON:
 
 ```bash

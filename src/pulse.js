@@ -13,7 +13,7 @@ export function parseRepo(value) {
   };
 }
 
-export async function fetchGitHubItems({ repo, limit = 30, token = "" }) {
+export async function fetchGitHubItems({ repo, limit = 30, token = "", label = "" }) {
   parseRepo(repo);
 
   const url = new URL(`${GITHUB_API}/repos/${repo}/issues`);
@@ -21,6 +21,10 @@ export async function fetchGitHubItems({ repo, limit = 30, token = "" }) {
   url.searchParams.set("sort", "updated");
   url.searchParams.set("direction", "desc");
   url.searchParams.set("per_page", String(limit));
+
+  if (label) {
+    url.searchParams.set("labels", label);
+  }
 
   const headers = {
     accept: "application/vnd.github+json",
@@ -44,7 +48,8 @@ export function buildDigest(items, options = {}) {
   const staleDays = options.staleDays || 7;
   const repo = options.repo || "unknown/repo";
 
-  const normalized = items.map((item) => normalizeItem(item, now, staleDays));
+  let normalized = items.map((item) => normalizeItem(item, now, staleDays));
+  normalized = filterNormalizedItems(normalized, options);
   const pullRequests = normalized.filter((item) => item.kind === "pull_request");
   const issues = normalized.filter((item) => item.kind === "issue");
   const stale = normalized.filter((item) => item.isStale);
@@ -72,6 +77,28 @@ export function buildDigest(items, options = {}) {
     ...summary,
     markdown: renderMarkdown(summary),
   };
+}
+
+function filterNormalizedItems(items, options) {
+  let filtered = items;
+
+  if (options.label) {
+    const requiredLabels = options.label
+      .split(",")
+      .map((label) => normalizeFilterValue(label))
+      .filter(Boolean);
+    filtered = filtered.filter((item) =>
+      requiredLabels.every((label) =>
+        item.labels.some((itemLabel) => normalizeFilterValue(itemLabel) === label),
+      ),
+    );
+  }
+
+  return filtered;
+}
+
+function normalizeFilterValue(value) {
+  return String(value || "").trim().toLowerCase();
 }
 
 function normalizeItem(item, now, staleDays) {

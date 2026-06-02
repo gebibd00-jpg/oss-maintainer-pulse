@@ -16,6 +16,7 @@ Options:
   --days       Stale threshold in days. Default: 7.
   --format     Output format: markdown or json. Default: markdown.
   --limit      Maximum GitHub items to fetch. Default: 30.
+  --label      Filter by label name. Comma-separated labels require all labels.
   --token      GitHub token. Defaults to GITHUB_TOKEN when present.
 `;
 
@@ -93,12 +94,14 @@ async function main() {
           repo: repo.fullName,
           limit: args.limit,
           token: args.token,
+          label: args.label,
         });
 
     const digest = buildDigest(items, {
       repo: repo?.fullName || "local-input",
       staleDays: args.days,
       now: new Date(),
+      label: args.label
     });
 
     stdout.write(
