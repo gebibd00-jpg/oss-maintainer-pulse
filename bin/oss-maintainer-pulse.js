@@ -7,8 +7,8 @@ import { buildDigest, fetchGitHubItems, parseRepo } from "../src/pulse.js";
 const usage = `oss-maintainer-pulse
 
 Usage:
-  oss-maintainer-pulse --repo owner/name [--days 7] [--format markdown|json] [--limit 30]
-  oss-maintainer-pulse --input sample.json [--format markdown|json]
+  oss-maintainer-pulse --repo owner/name [--days 7] [--format markdown|json] [--limit 30] [--author login] [--label name] [--kind pr|issue]
+  oss-maintainer-pulse --input sample.json [--format markdown|json] [--author login] [--label name] [--kind pr|issue]
 
 Options:
   --repo       Public GitHub repository in owner/name form.
@@ -16,6 +16,9 @@ Options:
   --days       Stale threshold in days. Default: 7.
   --format     Output format: markdown or json. Default: markdown.
   --limit      Maximum GitHub items to fetch. Default: 30.
+  --author     Filter by issue or pull request author login.
+  --label      Filter by label name. Comma-separated labels require all labels.
+  --kind       Filter by item type: pr or issue.
   --token      GitHub token. Defaults to GITHUB_TOKEN when present.
 `;
 
@@ -59,6 +62,10 @@ function parseArgs(argv) {
     throw new Error("--format must be markdown or json");
   }
 
+  if (args.kind && !["pr", "issue"].includes(args.kind)) {
+    throw new Error("--kind must be pr or issue");
+  }
+
   return args;
 }
 
@@ -90,15 +97,21 @@ async function main() {
     const items = args.input
       ? await readInput(args.input)
       : await fetchGitHubItems({
-          repo: repo.fullName,
-          limit: args.limit,
-          token: args.token,
-        });
+        repo: repo.fullName,
+        limit: args.limit,
+        token: args.token,
+        label: args.label,
+        author: args.author,
+        kind: args.kind,
+      });
 
     const digest = buildDigest(items, {
       repo: repo?.fullName || "local-input",
       staleDays: args.days,
       now: new Date(),
+      label: args.label,
+      author: args.author,
+      kind: args.kind,
     });
 
     stdout.write(

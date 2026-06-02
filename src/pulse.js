@@ -13,15 +13,15 @@ export function parseRepo(value) {
   };
 }
 
-export async function fetchGitHubItems({ repo, limit = 30, token = "" }) {
+export async function fetchGitHubItems({
+  repo,
+  limit = 30,
+  token = "",
+  author = "",
+  label = "",
+  kind = "",
+}) {
   parseRepo(repo);
-
-  const url = new URL(`${GITHUB_API}/repos/${repo}/issues`);
-  url.searchParams.set("state", "open");
-  url.searchParams.set("sort", "updated");
-  url.searchParams.set("direction", "desc");
-  url.searchParams.set("per_page", String(limit));
-
   const headers = {
     accept: "application/vnd.github+json",
     "user-agent": "oss-maintainer-pulse",
@@ -29,6 +29,67 @@ export async function fetchGitHubItems({ repo, limit = 30, token = "" }) {
 
   if (token) {
     headers.authorization = `Bearer ${token}`;
+  }
+
+  if (!kind) {
+    return fetchIssuesPage({
+      repo,
+      headers,
+      perPage: limit,
+      author,
+      label,
+    });
+  }
+
+  const items = [];
+  const matchesKind = kind === "pr" ? isPullRequestItem : isIssueItem;
+  let page = 1;
+
+  while (items.length < limit) {
+    const pageItems = await fetchIssuesPage({
+      repo,
+      headers,
+      perPage: 100,
+      page,
+      author,
+      label,
+    });
+
+    if (pageItems.length === 0) {
+      break;
+    }
+
+    for (const item of pageItems) {
+      if (matchesKind(item)) {
+        items.push(item);
+        if (items.length === limit) {
+          break;
+        }
+      }
+    }
+
+    if (pageItems.length < 100) {
+      break;
+    }
+
+    page += 1;
+  }
+
+  return items;
+}
+
+async function fetchIssuesPage({ repo, headers, perPage, page = 1, author = "", label = "" }) {
+  const url = new URL(`${GITHUB_API}/repos/${repo}/issues`);
+  url.searchParams.set("state", "open");
+  url.searchParams.set("sort", "updated");
+  url.searchParams.set("direction", "desc");
+  url.searchParams.set("per_page", String(perPage));
+  url.searchParams.set("page", String(page));
+  if (author) {
+    url.searchParams.set("creator", author);
+  }
+  if (label) {
+    url.searchParams.set("labels", label);
   }
 
   const response = await fetch(url, { headers });
@@ -44,7 +105,8 @@ export function buildDigest(items, options = {}) {
   const staleDays = options.staleDays || 7;
   const repo = options.repo || "unknown/repo";
 
-  const normalized = items.map((item) => normalizeItem(item, now, staleDays));
+  let normalized = items.map((item) => normalizeItem(item, now, staleDays));
+  normalized = filterNormalizedItems(normalized, options);
   const pullRequests = normalized.filter((item) => item.kind === "pull_request");
   const issues = normalized.filter((item) => item.kind === "issue");
   const stale = normalized.filter((item) => item.isStale);
@@ -72,6 +134,46 @@ export function buildDigest(items, options = {}) {
     ...summary,
     markdown: renderMarkdown(summary),
   };
+}
+
+function filterNormalizedItems(items, options) {
+  let filtered = items;
+
+  if (options.kind) {
+    const kind = options.kind === "pr" ? "pull_request" : "issue";
+    filtered = filtered.filter((item) => item.kind === kind);
+  }
+
+  if (options.author) {
+    const normalizedAuthor = normalizeFilterValue(options.author);
+    filtered = filtered.filter((item) => normalizeFilterValue(item.author) === normalizedAuthor);
+  }
+
+  if (options.label) {
+    const requiredLabels = options.label
+      .split(",")
+      .map((label) => normalizeFilterValue(label))
+      .filter(Boolean);
+    filtered = filtered.filter((item) =>
+      requiredLabels.every((label) =>
+        item.labels.some((itemLabel) => normalizeFilterValue(itemLabel) === label),
+      ),
+    );
+  }
+
+  return filtered;
+}
+
+function normalizeFilterValue(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function isPullRequestItem(item) {
+  return Boolean(item.pull_request);
+}
+
+function isIssueItem(item) {
+  return !isPullRequestItem(item);
 }
 
 function normalizeItem(item, now, staleDays) {
