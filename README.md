@@ -52,7 +52,7 @@ GITHUB_TOKEN=ghp_xxx oss-maintainer-pulse --repo owner/name
 Use saved GitHub API JSON:
 
 ```bash
-oss-maintainer-pulse --input sample/issues.json
+oss-maintainer-pulse --input test/sample.json
 ```
 
 ## Example output
@@ -77,6 +77,18 @@ oss-maintainer-pulse --input sample/issues.json
 - optional comment timeline inspection for more accurate "needs response" detection
 - release checklist generation
 - maintainer workload trend report
+
+## GitHub Actions Example
+
+An optional scheduled workflow example lives at [examples/weekly-triage.yml](./examples/weekly-triage.yml).
+
+It is designed for maintainers who want a lightweight weekly triage issue without adding dependencies beyond Node and the GitHub CLI already available on GitHub-hosted runners.
+
+The example expects:
+
+- repository `issues: write` permission so it can open a triage issue
+- the default `GITHUB_TOKEN` available in Actions
+- the repository checkout, because it runs `bin/oss-maintainer-pulse.js` directly
 
 ## Contributing
 

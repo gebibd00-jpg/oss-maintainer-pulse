@@ -12,7 +12,7 @@
 
 - `--label`, `--author`, and `--kind` filters.
 - Better maintainer response detection using comment timeline inspection.
-- GitHub Actions example that creates or updates a weekly triage issue.
+- Update the weekly triage example to support reusing a single rolling issue.
 
 ## 0.3
 
