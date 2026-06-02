@@ -49,10 +49,10 @@ Use a token to avoid public GitHub API rate limits:
 GITHUB_TOKEN=ghp_xxx oss-maintainer-pulse --repo owner/name
 ```
 
-Filter by label:
+Filter by label, author, or kind:
 
 ```bash
-oss-maintainer-pulse --repo owner/name --label docs,triage
+oss-maintainer-pulse --repo owner/name --label docs,triage --author octocat --kind issue
 ```
 
 Use saved GitHub API JSON:
@@ -79,7 +79,6 @@ oss-maintainer-pulse --input sample/issues.json
 ## Roadmap
 
 - GitHub Actions workflow that posts a scheduled digest to an issue
-- `--label` and `--author` filters
 - optional comment timeline inspection for more accurate "needs response" detection
 - release checklist generation
 - maintainer workload trend report
