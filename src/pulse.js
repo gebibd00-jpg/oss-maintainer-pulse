@@ -13,7 +13,7 @@ export function parseRepo(value) {
   };
 }
 
-export async function fetchGitHubItems({ repo, limit = 30, token = "", label = "" }) {
+export async function fetchGitHubItems({ repo, limit = 30, token = "", label = "", author = "" }) {
   parseRepo(repo);
 
   const url = new URL(`${GITHUB_API}/repos/${repo}/issues`);
@@ -24,6 +24,10 @@ export async function fetchGitHubItems({ repo, limit = 30, token = "", label = "
 
   if (label) {
     url.searchParams.set("labels", label);
+  }
+
+  if (author) {
+    url.searchParams.set("creator", author);
   }
 
   const headers = {
@@ -81,6 +85,11 @@ export function buildDigest(items, options = {}) {
 
 function filterNormalizedItems(items, options) {
   let filtered = items;
+
+  if (options.author) {
+    const normalizedAuthor = normalizeFilterValue(options.author);
+    filtered = filtered.filter((item) => normalizeFilterValue(item.author) === normalizedAuthor);
+  }
 
   if (options.label) {
     const requiredLabels = options.label
